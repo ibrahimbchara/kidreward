@@ -1,15 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/contexts/UserContext';
 import UserSwitcher from '@/components/UserSwitcher';
 
-interface User {
-  id: number;
-  name: string;
-  total_points: number;
-}
+
 
 interface Stats {
   totalPoints: number;
@@ -50,9 +46,9 @@ export default function Dashboard() {
     if (currentKid) {
       loadDashboardData();
     }
-  }, [currentKid]);
+  }, [currentKid, loadDashboardData]);
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -87,7 +83,7 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
 
   const handleLogout = async () => {
     try {

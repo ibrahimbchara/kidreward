@@ -105,7 +105,7 @@ export default function AddKidPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Kid's Name
+                Kid&apos;s Name
               </label>
               <input
                 type="text"
@@ -115,7 +115,7 @@ export default function AddKidPage() {
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 bg-white"
-                placeholder="Enter kid's name"
+                placeholder="Enter kid&apos;s name"
               />
             </div>
 

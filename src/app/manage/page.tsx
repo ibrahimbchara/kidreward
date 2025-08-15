@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/contexts/UserContext';
 import PointsManager from '@/components/PointsManager';
@@ -46,9 +46,9 @@ export default function ManagePage() {
     if (currentKid) {
       loadStats();
     }
-  }, [currentKid]);
+  }, [currentKid, loadStats]);
 
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -82,7 +82,7 @@ export default function ManagePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const handleLogout = async () => {
     try {

@@ -59,7 +59,7 @@ export function verifyToken(token: string): AuthSession {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as AuthSession;
     return decoded;
-  } catch (error) {
+  } catch {
     throw new AuthError('Invalid token');
   }
 }
@@ -218,7 +218,7 @@ export async function updateKid(kidId: number, parentId: number, data: UpdateKid
 
   // Build update query dynamically
   const updates: string[] = [];
-  const values: any[] = [];
+  const values: unknown[] = [];
 
   if (name !== undefined) {
     updates.push('name = ?');

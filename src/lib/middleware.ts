@@ -11,15 +11,15 @@ export async function getAuthenticatedSession(request: NextRequest): Promise<Aut
   try {
     const session = verifyToken(token);
     return session;
-  } catch (error) {
+  } catch {
     throw new AuthError('Invalid authentication token');
   }
 }
 
-export function createAuthenticatedHandler<T = any>(
-  handler: (request: NextRequest, session: AuthSession, ...args: any[]) => Promise<Response>
+export function createAuthenticatedHandler(
+  handler: (request: NextRequest, session: AuthSession, ...args: unknown[]) => Promise<Response>
 ) {
-  return async (request: NextRequest, ...args: any[]): Promise<Response> => {
+  return async (request: NextRequest, ...args: unknown[]): Promise<Response> => {
     try {
       const session = await getAuthenticatedSession(request);
       return await handler(request, session, ...args);
@@ -46,10 +46,10 @@ export function createAuthenticatedHandler<T = any>(
   };
 }
 
-export function createKidRequiredHandler<T = any>(
-  handler: (request: NextRequest, session: AuthSession, kidId: number, ...args: any[]) => Promise<Response>
+export function createKidRequiredHandler(
+  handler: (request: NextRequest, session: AuthSession, kidId: number, ...args: unknown[]) => Promise<Response>
 ) {
-  return async (request: NextRequest, ...args: any[]): Promise<Response> => {
+  return async (request: NextRequest, ...args: unknown[]): Promise<Response> => {
     try {
       const session = await getAuthenticatedSession(request);
 

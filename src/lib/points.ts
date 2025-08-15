@@ -157,7 +157,7 @@ export async function achieveGoal(goalId: number, kidId: number): Promise<Goal> 
   return updatedGoal;
 }
 
-async function checkAndAchieveGoals(kidId: number, db: any): Promise<void> {
+async function checkAndAchieveGoals(kidId: number, db: Database): Promise<void> {
   // Get kid's current points
   const kid = await db.get(
     'SELECT total_points FROM kids WHERE id = ?',

@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react';
 
 export default function DebugPage() {
   const { session, currentKid, allKids, loading } = useUser();
-  const [authData, setAuthData] = useState<any>(null);
-  const [kidsData, setKidsData] = useState<any>(null);
+  const [authData, setAuthData] = useState<unknown>(null);
+  const [kidsData, setKidsData] = useState<unknown>(null);
 
   useEffect(() => {
     const fetchDebugData = async () => {

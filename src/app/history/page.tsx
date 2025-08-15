@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/contexts/UserContext';
 import UserSwitcher from '@/components/UserSwitcher';
@@ -25,9 +25,9 @@ export default function HistoryPage() {
     if (currentKid) {
       loadHistory();
     }
-  }, [currentKid, limit]);
+  }, [currentKid, limit, loadHistory]);
 
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/points/history?limit=${limit}`);
@@ -47,7 +47,7 @@ export default function HistoryPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [limit]);
 
   const handleLogout = async () => {
     try {

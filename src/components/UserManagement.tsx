@@ -225,7 +225,7 @@ export default function UserManagement() {
             )}
 
             <p className="text-gray-700 mb-6">
-              Are you sure you want to delete <strong>{currentKid.name}</strong>'s profile?
+              Are you sure you want to delete <strong>{currentKid.name}</strong>&apos;s profile?
               This will permanently delete all points, goals, and activity history. This action cannot be undone.
             </p>
 

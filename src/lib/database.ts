@@ -4,9 +4,9 @@ import path from 'path';
 
 // Database interface
 export interface Database {
-  run: (sql: string, params?: any[]) => Promise<sqlite3.RunResult>;
-  get: (sql: string, params?: any[]) => Promise<any>;
-  all: (sql: string, params?: any[]) => Promise<any[]>;
+  run: (sql: string, params?: unknown[]) => Promise<sqlite3.RunResult>;
+  get: (sql: string, params?: unknown[]) => Promise<unknown>;
+  all: (sql: string, params?: unknown[]) => Promise<unknown[]>;
   close: () => Promise<void>;
 }
 
@@ -76,7 +76,7 @@ class DatabaseManager {
   }
 
   private createDatabaseInterface(db: sqlite3.Database): Database {
-    const run = (sql: string, params?: any[]): Promise<sqlite3.RunResult> => {
+    const run = (sql: string, params?: unknown[]): Promise<sqlite3.RunResult> => {
       return new Promise((resolve, reject) => {
         db.run(sql, params || [], function(err) {
           if (err) {
@@ -164,7 +164,7 @@ class DatabaseManager {
     await db.run(`CREATE INDEX IF NOT EXISTS idx_kids_parent_id ON kids(parent_id)`);
   }
 
-  private async migrateToNewSchema(db: any): Promise<void> {
+  private async migrateToNewSchema(db: sqlite3.Database): Promise<void> {
     // This is a simple migration - in a real app you'd want more sophisticated migration logic
     console.log('Dropping old tables to start fresh with new schema...');
 

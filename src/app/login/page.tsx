@@ -6,7 +6,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Kid Rewards</h1>
-          <p className="text-gray-600">Parent Login - Manage your family's rewards!</p>
+          <p className="text-gray-600">Parent Login - Manage your family&apos;s rewards!</p>
         </div>
         <AuthForm mode="login" />
       </div>
