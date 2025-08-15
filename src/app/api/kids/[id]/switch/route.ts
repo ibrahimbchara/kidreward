@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createAuthenticatedHandler } from '@/lib/middleware';
 import { switchToKid, generateToken, AuthError } from '@/lib/auth';
 
-export const POST = createAuthenticatedHandler(async (request: NextRequest, session, { params }: { params: Promise<{ id: string }> }) => {
+export const POST = createAuthenticatedHandler<{ params: Promise<{ id: string }> }>(async (request: NextRequest, session, context) => {
   try {
-    const { id } = await params;
+    if (!context?.params) {
+      return NextResponse.json(
+        { error: 'Missing params' },
+        { status: 400 }
+      );
+    }
+    const { id } = await context.params;
     const kidId = parseInt(id);
     
     if (isNaN(kidId)) {
