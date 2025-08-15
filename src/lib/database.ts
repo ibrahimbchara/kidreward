@@ -88,9 +88,9 @@ class DatabaseManager {
       });
     };
 
-    const get = promisify(db.get.bind(db));
-    const all = promisify(db.all.bind(db));
-    const close = promisify(db.close.bind(db));
+    const get = promisify(db.get.bind(db)) as (sql: string, params?: unknown[]) => Promise<unknown>;
+    const all = promisify(db.all.bind(db)) as (sql: string, params?: unknown[]) => Promise<unknown[]>;
+    const close = promisify(db.close.bind(db)) as () => Promise<void>;
 
     return { run, get, all, close };
   }
