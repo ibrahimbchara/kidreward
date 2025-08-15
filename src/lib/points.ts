@@ -170,7 +170,7 @@ async function checkAndAchieveGoals(kidId: number, db: DatabaseWrapper): Promise
   const achievableGoals = await db.all(
     'SELECT * FROM goals WHERE kid_id = ? AND is_achieved = FALSE AND points_required <= ?',
     [kidId, kid.total_points]
-  );
+  ) as Goal[];
 
   // Auto-achieve goals (optional - you might want manual achievement)
   for (const goal of achievableGoals) {

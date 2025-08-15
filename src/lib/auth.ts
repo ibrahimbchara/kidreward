@@ -93,7 +93,7 @@ export async function registerParent(data: RegisterParentData): Promise<AuthSess
   const db = await getDatabase();
 
   // Check if parent already exists
-  const existingParent = await db.get('SELECT id FROM parents WHERE email = ?', [email]);
+  const existingParent = await db.get('SELECT id FROM parents WHERE email = ?', [email]) as { id: number } | undefined;
   if (existingParent) {
     throw new AuthError('An account with this email already exists');
   }
@@ -159,7 +159,7 @@ export async function addKid(parentId: number, data: AddKidData): Promise<Kid> {
   const existingKid = await db.get(
     'SELECT id FROM kids WHERE parent_id = ? AND name = ?',
     [parentId, name.trim()]
-  );
+  ) as { id: number } | undefined;
 
   if (existingKid) {
     throw new AuthError('A kid with this name already exists');

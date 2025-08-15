@@ -99,7 +99,7 @@ class DatabaseManager {
     const db = await this.connect();
 
     // Check if we need to migrate from old schema
-    const oldUsersTable = await db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
+    const oldUsersTable = await db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='users'") as { name: string } | undefined;
 
     if (oldUsersTable) {
       console.log('Migrating from old schema to new parent/kids schema...');
