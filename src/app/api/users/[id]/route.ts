@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAuthenticatedHandler } from '@/lib/middleware';
-import { updateUser, deleteUser, AuthError } from '@/lib/auth';
+import { updateKid, deleteKid, AuthError } from '@/lib/auth';
 
-export const PUT = createAuthenticatedHandler(async (request: NextRequest, user, { params }: { params: Promise<{ id: string }> }) => {
+export const PUT = createAuthenticatedHandler(async (request: NextRequest, session, { params }: { params: Promise<{ id: string }> }) => {
   try {
     const { id } = await params;
     const userId = parseInt(id);
@@ -14,8 +14,8 @@ export const PUT = createAuthenticatedHandler(async (request: NextRequest, user,
       );
     }
 
-    // Only allow users to update their own profile
-    if (userId !== user.id) {
+    // Only allow parents to update their own kids
+    if (userId !== session.currentKidId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 403 }
@@ -25,7 +25,7 @@ export const PUT = createAuthenticatedHandler(async (request: NextRequest, user,
     const body = await request.json();
     const { name, age } = body;
 
-    const updatedUser = await updateUser(userId, { name, age });
+    const updatedUser = await updateKid(userId, session.parentId, { name, age });
 
     return NextResponse.json({
       message: 'User updated successfully',
@@ -52,7 +52,7 @@ export const PUT = createAuthenticatedHandler(async (request: NextRequest, user,
   }
 });
 
-export const DELETE = createAuthenticatedHandler(async (request: NextRequest, user, { params }: { params: Promise<{ id: string }> }) => {
+export const DELETE = createAuthenticatedHandler(async (request: NextRequest, session, { params }: { params: Promise<{ id: string }> }) => {
   try {
     const { id } = await params;
     const userId = parseInt(id);
@@ -64,15 +64,15 @@ export const DELETE = createAuthenticatedHandler(async (request: NextRequest, us
       );
     }
 
-    // Only allow users to delete their own profile
-    if (userId !== user.id) {
+    // Only allow parents to delete their own kids
+    if (userId !== session.currentKidId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 403 }
       );
     }
 
-    await deleteUser(userId);
+    await deleteKid(userId, session.parentId);
 
     const response = NextResponse.json({
       message: 'User deleted successfully'
