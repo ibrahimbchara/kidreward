@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createAuthenticatedHandler } from '@/lib/middleware';
 import { updateKid, deleteKid, AuthError } from '@/lib/auth';
 
-export const PUT = createAuthenticatedHandler(async (request: NextRequest, session, { params }: { params: Promise<{ id: string }> }) => {
+export const PUT = createAuthenticatedHandler<{ params: Promise<{ id: string }> }>(async (request: NextRequest, session, context) => {
   try {
-    const { id } = await params;
+    if (!context?.params) {
+      return NextResponse.json(
+        { error: 'Missing params' },
+        { status: 400 }
+      );
+    }
+    const { id } = await context.params;
     const userId = parseInt(id);
     
     if (isNaN(userId)) {
@@ -52,9 +58,15 @@ export const PUT = createAuthenticatedHandler(async (request: NextRequest, sessi
   }
 });
 
-export const DELETE = createAuthenticatedHandler(async (request: NextRequest, session, { params }: { params: Promise<{ id: string }> }) => {
+export const DELETE = createAuthenticatedHandler<{ params: Promise<{ id: string }> }>(async (request: NextRequest, session, context) => {
   try {
-    const { id } = await params;
+    if (!context?.params) {
+      return NextResponse.json(
+        { error: 'Missing params' },
+        { status: 400 }
+      );
+    }
+    const { id } = await context.params;
     const userId = parseInt(id);
     
     if (isNaN(userId)) {

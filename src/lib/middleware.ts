@@ -16,10 +16,10 @@ export async function getAuthenticatedSession(request: NextRequest): Promise<Aut
   }
 }
 
-export function createAuthenticatedHandler(
-  handler: (request: NextRequest, session: AuthSession, context?: unknown) => Promise<Response>
+export function createAuthenticatedHandler<T = Record<string, unknown>>(
+  handler: (request: NextRequest, session: AuthSession, context?: T) => Promise<Response>
 ) {
-  return async (request: NextRequest, context?: unknown): Promise<Response> => {
+  return async (request: NextRequest, context?: T): Promise<Response> => {
     try {
       const session = await getAuthenticatedSession(request);
       return await handler(request, session, context);
@@ -46,10 +46,10 @@ export function createAuthenticatedHandler(
   };
 }
 
-export function createKidRequiredHandler(
-  handler: (request: NextRequest, session: AuthSession, kidId: number, context?: unknown) => Promise<Response>
+export function createKidRequiredHandler<T = Record<string, unknown>>(
+  handler: (request: NextRequest, session: AuthSession, kidId: number, context?: T) => Promise<Response>
 ) {
-  return async (request: NextRequest, context?: unknown): Promise<Response> => {
+  return async (request: NextRequest, context?: T): Promise<Response> => {
     try {
       const session = await getAuthenticatedSession(request);
 

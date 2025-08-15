@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createKidRequiredHandler } from '@/lib/middleware';
 import { achieveGoal } from '@/lib/points';
 
-export const POST = createKidRequiredHandler(async (request: NextRequest, session, kidId, { params }: { params: Promise<{ id: string }> }) => {
+export const POST = createKidRequiredHandler<{ params: Promise<{ id: string }> }>(async (request: NextRequest, session, kidId, context) => {
   try {
-    const { id } = await params;
+    if (!context?.params) {
+      return NextResponse.json(
+        { error: 'Missing params' },
+        { status: 400 }
+      );
+    }
+    const { id } = await context.params;
     const goalId = parseInt(id);
 
     if (isNaN(goalId)) {
