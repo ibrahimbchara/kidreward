@@ -1,4 +1,4 @@
-import { getDatabase, PointTransaction, Goal } from './database';
+import { getDatabase, PointTransaction, Goal, DatabaseWrapper } from './database';
 
 export interface AddPointsData {
   kidId: number;
@@ -136,7 +136,7 @@ export async function achieveGoal(goalId: number, kidId: number): Promise<Goal> 
   const kid = await db.get(
     'SELECT total_points FROM kids WHERE id = ?',
     [kidId]
-  );
+  ) as { total_points: number } | undefined;
 
   if (!kid || kid.total_points < goal.points_required) {
     throw new Error('Not enough points to achieve this goal');
@@ -157,12 +157,12 @@ export async function achieveGoal(goalId: number, kidId: number): Promise<Goal> 
   return updatedGoal;
 }
 
-async function checkAndAchieveGoals(kidId: number, db: Database): Promise<void> {
+async function checkAndAchieveGoals(kidId: number, db: DatabaseWrapper): Promise<void> {
   // Get kid's current points
   const kid = await db.get(
     'SELECT total_points FROM kids WHERE id = ?',
     [kidId]
-  );
+  ) as { total_points: number } | undefined;
 
   if (!kid) return;
 
@@ -193,22 +193,22 @@ export async function getKidStats(kidId: number): Promise<{
   const kid = await db.get(
     'SELECT total_points FROM kids WHERE id = ?',
     [kidId]
-  );
+  ) as { total_points: number } | undefined;
 
   const rewardPoints = await db.get(
     'SELECT COALESCE(SUM(points), 0) as total FROM point_transactions WHERE kid_id = ? AND type = "reward"',
     [kidId]
-  );
+  ) as { total: number };
 
   const penaltyPoints = await db.get(
     'SELECT COALESCE(SUM(ABS(points)), 0) as total FROM point_transactions WHERE kid_id = ? AND type = "penalty"',
     [kidId]
-  );
+  ) as { total: number };
 
   const goalsStats = await db.get(
     'SELECT COUNT(*) as total, SUM(CASE WHEN is_achieved THEN 1 ELSE 0 END) as achieved FROM goals WHERE kid_id = ?',
     [kidId]
-  );
+  ) as { total: number; achieved: number };
 
   return {
     totalPoints: kid?.total_points || 0,
