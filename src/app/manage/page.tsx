@@ -82,7 +82,7 @@ export default function ManagePage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   const handleLogout = async () => {
     try {

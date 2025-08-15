@@ -47,7 +47,7 @@ export default function HistoryPage() {
     } finally {
       setLoading(false);
     }
-  }, [limit]);
+  }, [limit, router]);
 
   const handleLogout = async () => {
     try {

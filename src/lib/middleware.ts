@@ -46,10 +46,10 @@ export function createAuthenticatedHandler(
   };
 }
 
-export function createKidRequiredHandler(
-  handler: (request: NextRequest, session: AuthSession, kidId: number, ...args: unknown[]) => Promise<Response>
+export function createKidRequiredHandler<T extends Record<string, unknown> = Record<string, unknown>>(
+  handler: (request: NextRequest, session: AuthSession, kidId: number, context: T) => Promise<Response>
 ) {
-  return async (request: NextRequest, ...args: unknown[]): Promise<Response> => {
+  return async (request: NextRequest, context: T): Promise<Response> => {
     try {
       const session = await getAuthenticatedSession(request);
 
@@ -63,7 +63,7 @@ export function createKidRequiredHandler(
         );
       }
 
-      return await handler(request, session, session.currentKidId, ...args);
+      return await handler(request, session, session.currentKidId, context);
     } catch (error) {
       if (error instanceof AuthError) {
         return new Response(
