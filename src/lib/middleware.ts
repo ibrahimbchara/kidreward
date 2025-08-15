@@ -16,6 +16,12 @@ export async function getAuthenticatedSession(request: NextRequest): Promise<Aut
   }
 }
 
+export function createAuthenticatedHandler(
+  handler: (request: NextRequest, session: AuthSession) => Promise<Response>
+): (request: NextRequest) => Promise<Response>;
+export function createAuthenticatedHandler<T>(
+  handler: (request: NextRequest, session: AuthSession, context: T) => Promise<Response>
+): (request: NextRequest, context: T) => Promise<Response>;
 export function createAuthenticatedHandler<T = Record<string, unknown>>(
   handler: (request: NextRequest, session: AuthSession, context?: T) => Promise<Response>
 ) {
@@ -46,6 +52,12 @@ export function createAuthenticatedHandler<T = Record<string, unknown>>(
   };
 }
 
+export function createKidRequiredHandler(
+  handler: (request: NextRequest, session: AuthSession, kidId: number) => Promise<Response>
+): (request: NextRequest) => Promise<Response>;
+export function createKidRequiredHandler<T>(
+  handler: (request: NextRequest, session: AuthSession, kidId: number, context: T) => Promise<Response>
+): (request: NextRequest, context: T) => Promise<Response>;
 export function createKidRequiredHandler<T = Record<string, unknown>>(
   handler: (request: NextRequest, session: AuthSession, kidId: number, context?: T) => Promise<Response>
 ) {
