@@ -42,12 +42,6 @@ export default function ManagePage() {
   const [activeTab, setActiveTab] = useState<'points' | 'goals'>('points');
   const router = useRouter();
 
-  useEffect(() => {
-    if (currentKid) {
-      loadStats();
-    }
-  }, [currentKid, loadStats]);
-
   const loadStats = useCallback(async () => {
     try {
       setLoading(true);
@@ -83,6 +77,12 @@ export default function ManagePage() {
       setLoading(false);
     }
   }, [router]);
+
+  useEffect(() => {
+    if (currentKid) {
+      loadStats();
+    }
+  }, [currentKid, loadStats]);
 
   const handleLogout = async () => {
     try {

@@ -21,12 +21,6 @@ export default function HistoryPage() {
   const [limit, setLimit] = useState(50);
   const router = useRouter();
 
-  useEffect(() => {
-    if (currentKid) {
-      loadHistory();
-    }
-  }, [currentKid, limit, loadHistory]);
-
   const loadHistory = useCallback(async () => {
     try {
       setLoading(true);
@@ -48,6 +42,12 @@ export default function HistoryPage() {
       setLoading(false);
     }
   }, [limit, router]);
+
+  useEffect(() => {
+    if (currentKid) {
+      loadHistory();
+    }
+  }, [currentKid, limit, loadHistory]);
 
   const handleLogout = async () => {
     try {

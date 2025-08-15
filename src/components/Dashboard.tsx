@@ -42,12 +42,6 @@ export default function Dashboard() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  useEffect(() => {
-    if (currentKid) {
-      loadDashboardData();
-    }
-  }, [currentKid, loadDashboardData]);
-
   const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
@@ -84,6 +78,12 @@ export default function Dashboard() {
       setLoading(false);
     }
   }, [router]);
+
+  useEffect(() => {
+    if (currentKid) {
+      loadDashboardData();
+    }
+  }, [currentKid, loadDashboardData]);
 
   const handleLogout = async () => {
     try {
