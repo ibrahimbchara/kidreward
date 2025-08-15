@@ -3,7 +3,7 @@ import { promisify } from 'util';
 import path from 'path';
 
 // Database interface
-export interface Database {
+export interface DatabaseWrapper {
   run: (sql: string, params?: unknown[]) => Promise<sqlite3.RunResult>;
   get: (sql: string, params?: unknown[]) => Promise<unknown>;
   all: (sql: string, params?: unknown[]) => Promise<unknown[]>;
@@ -59,7 +59,7 @@ class DatabaseManager {
     this.dbPath = path.join(process.cwd(), 'database.sqlite');
   }
 
-  async connect(): Promise<Database> {
+  async connect(): Promise<DatabaseWrapper> {
     if (this.db) {
       return this.createDatabaseInterface(this.db);
     }
@@ -75,7 +75,7 @@ class DatabaseManager {
     });
   }
 
-  private createDatabaseInterface(db: sqlite3.Database): Database {
+  private createDatabaseInterface(db: sqlite3.Database): DatabaseWrapper {
     const run = (sql: string, params?: unknown[]): Promise<sqlite3.RunResult> => {
       return new Promise((resolve, reject) => {
         db.run(sql, params || [], function(err) {
@@ -164,7 +164,7 @@ class DatabaseManager {
     await db.run(`CREATE INDEX IF NOT EXISTS idx_kids_parent_id ON kids(parent_id)`);
   }
 
-  private async migrateToNewSchema(db: sqlite3.Database): Promise<void> {
+  private async migrateToNewSchema(db: DatabaseWrapper): Promise<void> {
     // This is a simple migration - in a real app you'd want more sophisticated migration logic
     console.log('Dropping old tables to start fresh with new schema...');
 
@@ -179,7 +179,7 @@ class DatabaseManager {
 // Singleton instance
 const dbManager = new DatabaseManager();
 
-export async function getDatabase(): Promise<Database> {
+export async function getDatabase(): Promise<DatabaseWrapper> {
   return await dbManager.connect();
 }
 
